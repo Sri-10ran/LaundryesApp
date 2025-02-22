@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.laundry">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- Notifications Permission (For Delivery Updates) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,6 +26,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Laundryes"
         tools:targetApi="31">
+        <!-- Firebase Auth -->
+        <meta-data
+            android:name="com.google.firebase.auth.API_KEY"
+            android:value="681121336544-2gsqhul7d8inkrhll4i1a6182ggtlsnr.apps.googleusercontent.com" />
 
         <activity
             android:name=".MainActivity"
@@ -24,6 +42,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- ✅ Google Sign-In Activity -->
+        <activity
+            android:name=".SignInActivity"
+            android:exported="true"
+            android:label="Sign In"
+            android:theme="@style/Theme.Laundryes">
+
+        </activity>
+
+
+        <activity
+            android:name=".Profile"
+            android:exported="true"
+            android:label="Profile"
+            android:theme="@style/Theme.Laundryes" />
+
 
         <activity
             android:name=".FAQActivity"
@@ -50,11 +85,17 @@
             android:exported="true"
             android:label="Order"
             android:theme="@style/Theme.Laundryes" />
+<!--        <activity-->
+<!--            android:name=".SignupActivity"-->
+<!--            android:exported="true"-->
+<!--            android:label="Order"-->
+<!--            android:theme="@style/Theme.Laundryes"/>-->
+
 
     </application>
 
     <!-- ✅ Permission for reading images from storage (Required for API < 33) -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+
+
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.example.laundryes.ui.theme
+package com.example.laundry.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

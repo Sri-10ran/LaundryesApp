@@ -1,4 +1,4 @@
-package com.example.laundryes
+package com.example.laundry
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package com.example.laundryes
+package com.example.laundry
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 
 class OrderScreen : ComponentActivity() {

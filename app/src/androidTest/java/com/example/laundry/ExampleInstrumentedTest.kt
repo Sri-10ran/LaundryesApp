@@ -1,4 +1,4 @@
-package com.example.laundryes
+package com.example.laundry
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

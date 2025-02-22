@@ -1,7 +1,8 @@
-package com.example.laundryes
+package com.example.laundry
 
-import android.os.Bundle
 import android.content.Intent
+import android.os.Bundle
+import android.provider.ContactsContract
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -14,18 +15,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
-
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             AppEntryPoint(this)
         }
@@ -35,10 +36,17 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppEntryPoint(activity: ComponentActivity) {
     var showSplashScreen by remember { mutableStateOf(true) }
+    val auth = FirebaseAuth.getInstance()
 
     LaunchedEffect(Unit) {
-        delay(3000)
+        delay(3000)  // Show splash for 3 seconds
         showSplashScreen = false
+
+        // Check authentication after splash
+        if (auth.currentUser == null) {
+            activity.startActivity(Intent(activity, SignInActivity::class.java))
+            activity.finish()
+        }
     }
 
     if (showSplashScreen) {
@@ -48,18 +56,17 @@ fun AppEntryPoint(activity: ComponentActivity) {
     }
 }
 
-
 @Composable
 fun SplashScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White), // Set background color
+            .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
-                painter = painterResource(id = R.drawable.logo), // Ensure this exists in drawable
+                painter = painterResource(id = R.drawable.logo),  // Ensure logo exists
                 contentDescription = "App Logo",
                 modifier = Modifier.size(150.dp)
             )
@@ -79,7 +86,7 @@ fun MainScreen(activity: ComponentActivity) {
         TopBar()
         CarouselSection()
         Spacer(modifier = Modifier.height(16.dp))
-        ButtonsSection(activity) // Pass activity to ButtonsSection
+        ButtonsSection(activity)
     }
 }
 
@@ -88,7 +95,7 @@ fun TopBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFF29ABE2)) // Blue color #29ABE2
+            .background(Color(0xFF29ABE2))
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -118,7 +125,7 @@ fun CarouselSection() {
     var currentIndex by remember { mutableStateOf(0) }
 
     LaunchedEffect(currentIndex) {
-        delay(2000) // Auto-scroll every 3 seconds
+        delay(2000)
         currentIndex = (currentIndex + 1) % images.size
     }
 
@@ -132,7 +139,7 @@ fun CarouselSection() {
 }
 
 @Composable
-fun ButtonsSection(activity: ComponentActivity) { // Pass activity for Intent
+fun ButtonsSection(activity: ComponentActivity) {
     val buttons = listOf(
         "Account" to R.drawable.profile,
         "Services" to R.drawable.list,
@@ -150,17 +157,12 @@ fun ButtonsSection(activity: ComponentActivity) { // Pass activity for Intent
             ) {
                 rowButtons.forEach { (text, iconRes) ->
                     CustomButton(text, painterResource(id = iconRes)) {
-                        if (text == "FAQ's") {
-                            val intent = Intent(activity, FAQActivity::class.java)
-                            activity.startActivity(intent) // Start FAQActivity
-                        }
-                        else if(text=="Contact"){
-                            val intent = Intent(activity, ContactActivity::class.java)
-                            activity.startActivity(intent)
-                        }
-                        else if(text=="Make order"){
-                            val intent = Intent(activity, OrderScreen::class.java)
-                            activity.startActivity(intent)
+                        when (text) {
+                            "FAQ's" -> activity.startActivity(Intent(activity, FAQActivity::class.java))
+                            "Contact" -> activity.startActivity(Intent(activity, ContactActivity::class.java))
+                            "Make order" -> activity.startActivity(Intent(activity, OrderScreen::class.java))
+                            "Account" -> activity.startActivity(Intent(activity,
+                                Profile::class.java))
                         }
                     }
                 }
@@ -176,7 +178,7 @@ fun CustomButton(text: String, icon: Painter, onClick: () -> Unit) {
         modifier = Modifier
             .size(100.dp)
             .background(Color(0xFF29ABE2), shape = RoundedCornerShape(16.dp))
-            .clickable { onClick() }, // Ensure the click event works
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -193,4 +195,3 @@ fun CustomButton(text: String, icon: Painter, onClick: () -> Unit) {
         }
     }
 }
-
